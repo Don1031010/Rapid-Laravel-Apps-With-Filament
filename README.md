@@ -34,3 +34,11 @@ TextEntry::make('has_spoken')
 
 ```
 
+#### Display `RichText' in `TextEntry`
+
+```php
+TextEntry::make('bio')
+  ->extraAttributes(['class' => 'prose dark:prose-invert'])
+  ->html(),
+```
+
