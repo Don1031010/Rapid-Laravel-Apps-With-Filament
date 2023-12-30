@@ -34,7 +34,7 @@ TextEntry::make('has_spoken')
 
 ```
 
-#### Display `RichText' in `TextEntry`
+#### Display `RichText` in `TextEntry`
 
 ```php
 TextEntry::make('bio')
