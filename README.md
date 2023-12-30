@@ -17,3 +17,20 @@ protected function getHeaderActions(): Array
 }
 ```
 
+#### Display something not in the database
+
+````php
+TextEntry::make('has_spoken')
+  ->getStateUsing(function($record) {
+      return $record->talks()->where('status', TalkStatus::APPROVED)->count() > 0 ? 'Previous Speaker' : 'Has Not Spoken';
+    })
+  ->badge()
+  ->color(function($state) {
+    if($state === 'Previous Speaker') {
+      return 'success';
+    }
+    return 'primary';
+  }),
+
+```
+
