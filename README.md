@@ -61,6 +61,24 @@ npm install
 npm run dev
 ```
 
+#### Form fields
+
+Add `->required()` or `->requiredIf()` to make the field required. Remove required field's star by adding `->markAsRequired(condition: false)`.
+
+`->maxLength(60)` is the same as `->rules(rules: ['max:60',])`.
+
+One can add helper text or hint: `->helpeText(text: 'The name of the conference.')`, `->hint(hint:'name of the conference')`, `->hintIcon(icon: 'heroicon-****')`, `->hintAction('learn more', fn() => 'https://www.google.com')`.
+
+Add prefix and/or suffix: `->url()->prefix(label: 'https://')` ('https://' will be displayed inside the input field), `->prefixIcon(iconName:'heroicon-o-globe-alt')`, `->suffix(label:'.com')`.
+
+Add default value: `->default(state: 'My Conference')` (only applies to create page, not edit page).
+
+RichText/MarkdownEditor toolbar customization: `->disableToolbarButtons( buttonsToDisable: ['italic'] )`, `->toolbarButtons(buttons: ['h2', 'bold'])`.
+
+Disable rowser native `DatePicker` and `DateTimePicker`: `->native(false)`.
+
+Use `foreignIdFor`: `$table->foreignIdFor(model:Venue::class)->nullable();`
+
 
 ## 4. Other Filament Packages
 
