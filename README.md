@@ -115,6 +115,13 @@ Forms\Components\Select::make(name:'region')
 ```sh
 composer require spatie/ray
 ```
+#### Move `form` and `table` definition to Model
+
+```php
+ return $form
+  ->schema(componets: Venue::getForm());
+```
+
 
 #### Limit Venue options by Region
 
@@ -130,6 +137,10 @@ Forms\Components\Select::make('venue_id') // got rerendered every time a differe
   ray(...args: $get(path: 'region')); // displays every time
   return $query->where('region', $get(path: 'region'));
 })
+ ->searchable()
+ ->preload() // if you have a small number of data
+ ->editOptionForm(schema: Venue::getForm()) // an edit button will appear on the right! a modal will pop up for editing.
+ ->createOptionForm(schema: Venue::getForm()) // popup modal for create
 ```
 
 
