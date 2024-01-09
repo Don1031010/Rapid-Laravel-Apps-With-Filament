@@ -2,7 +2,9 @@
 
 ## 2. Filament Forms
 
-### Install Filament
+### 2-1 Introduction to Filament
+
+#### Install Filament
 
 ```sh
 composer require filament/filament:"^3.1" -W
@@ -11,7 +13,7 @@ php artisan filament:install --panels
 ```
 Note both livewire and Alpine are also installed.
 
-### Change colors
+#### Change colors
 
 Inside `AdminPanelProvider.php`, you can easily change the colors of the app.
 
@@ -22,12 +24,42 @@ return $panel
     'gray' => Color::Slate,
   ])
 ````
-### Create Filament resource
+#### Create Filament resource
 
 ```sh
 php artisan make:filament-resource Conference --generate
 ```
 Note that if you use `--generate` then the table and form will be automatically filled.
+
+### 2-2 Basic form inputs
+
+#### Set up hot reloading
+
+First go to `vite.config.js`, import `refreshPaths` and change `refresh` as below.
+
+```php
+import laravel, {refreshPaths } from 'laravel-vite-plugin';
+...
+ refresh:[
+  ... refreshPaths,
+  'app/Livewire/**',
+  'app/Filament/**',
+ ],
+``` 
+Second, add `register` method in `AdminPanelProvider.php`.
+
+```php
+public function register(): void
+{
+  parent::register();
+  FilamentView::registerRenderHook(name: 'panels::body.end', hook: fn(): string => Blade::render("@vite('resources/js/app.js')"));
+} 
+```
+
+```sh
+npm install
+npm run dev
+```
 
 
 ## 4. Other Filament Packages
