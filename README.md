@@ -79,6 +79,59 @@ Disable rowser native `DatePicker` and `DateTimePicker`: `->native(false)`.
 
 Use `foreignIdFor`: `$table->foreignIdFor(model:Venue::class)->nullable();`
 
+### 2-3 Select input
+
+#### Create an Enum 
+
+```php
+namespace App\Enums; // create a Enums directory in app directory
+
+enum Region: string
+{
+ case US = 'US';
+ case EU = 'EU';
+ case Online = 'Online';
+}
+```
+Add casts to Venue model:
+
+```php
+protected $casts = [
+ 'id' => 'integer',
+ 'region' => Region::class,
+];
+```
+
+Use the enum in `Forms\Components\Select`:
+
+```php
+Forms\Components\Select::make(name:'region')
+ ->enum(enum:Region::class) // validate and only accept those values
+ ->options(options:Region::class), // give options in enum
+```
+
+#### Install ray for debug
+
+```sh
+composer require spatie/ray
+```
+
+#### Limit Venue options by Region
+
+All form components are livewire models. By default, live upate is disabled. Add `->live()` to region Select to enable live update which will update the server every time a different select is made, and  cause rerender of the whole livewire component.
+
+```php
+Forms\Components\Select::make(name:'region')
+ ->live() // enable live update for this model. 
+ ->enum(enum:Region::class) // validate and only accept those values
+ ->options(options:Region::class), // give options in enum
+Forms\Components\Select::make('venue_id') // got rerendered every time a different region is selected.
+ ->relationship('venue', 'name', modifyQueryUsing: function(Builder $query, Forms\Get $get) {
+  ray(...args: $get(path: 'region')); // displays every time
+  return $query->where('region', $get(path: 'region'));
+})
+```
+
 
 ## 4. Other Filament Packages
 
