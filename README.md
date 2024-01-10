@@ -174,6 +174,65 @@ CheckboxList::make('qualifications')
  ->columns(3),
 ```
 
+### 2-5 Layouts
+
+#### Organize the form into Sections, Fieldset
+
+```php
+Section::make(heading: 'Conference Details')
+  ->aside()
+  ->collapsible()
+  ->description('blah blah....')
+  ->icon('heroicon-o-...')
+  ->columns(2) // section has two columns
+  ->schema(components: [
+    TextInput::make('name')
+      ->columnSpanFull(), // or columnSpan(2)
+    DateTimePicker::make('start_date') // by default will take up one colum span
+      ->native(false),
+    DateTimePicker::make('end_date'),  // one column span
+
+    Fieldset::make('Status')
+      ->columns(2)
+      ->schema([
+        Toggle::make('is_published')
+          ->default(true),
+        Select::make('status')
+          ->options([
+            'draft' => 'Draft',
+            'published' => 'Published',
+            'archived' => 'Archived',
+          ])
+          ->required(),
+      ]),
+  ])
+
+#### Organize using tabs
+
+
+```php
+Tabs::make()
+->columnSpanFull()
+->tabs([
+  Tabs\Tab::make(label:'Conference Details')
+  ->schema([
+    
+  ]),
+  Tabs\Tab::make(label:'Location')
+  ->schema([
+    
+  ]),
+])
+```
+
+There is also a Wizard that can fill up form step by step.
+
+
+
+
+
+
+
 
 
 
