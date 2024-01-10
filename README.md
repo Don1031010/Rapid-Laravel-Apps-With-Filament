@@ -143,6 +143,39 @@ Forms\Components\Select::make('venue_id') // got rerendered every time a differe
  ->createOptionForm(schema: Venue::getForm()) // popup modal for create
 ```
 
+### 2-4 Checkbox List
+
+Add a json column to the `speakers` table. And add casts to `Speaker` model.
+
+```php
+$table->json(column: 'qualifications');
+
+protected $casts = [
+ 'id' => 'integer',
+ 'qualifications' => 'array',
+];
+```
+
+Add checkbox list to the form.
+
+```php
+CheckboxList::make('qualifications')
+ ->columnSpanFull()
+ ->searchable()
+ ->bulkToggleable()
+ ->options([
+  'business-leader' => 'Business Leader',
+  'first-time' => 'First Time Speaker',
+ ])
+ ->descriptions([
+  'business-leader' => 'Who is a business leader',
+  'first-time' => 'First time to speak',
+ ])
+ ->columns(3),
+```
+
+
+
 
 ## 4. Other Filament Packages
 
