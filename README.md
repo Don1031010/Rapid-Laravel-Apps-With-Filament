@@ -206,6 +206,7 @@ Section::make(heading: 'Conference Details')
           ->required(),
       ]),
   ])
+```
 
 #### Organize using tabs
 
