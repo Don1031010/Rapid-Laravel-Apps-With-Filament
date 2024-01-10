@@ -229,6 +229,37 @@ Tabs::make()
 There is also a Wizard that can fill up form step by step.
 
 
+### 2-7 File Uploads
+
+
+```php
+FileUpload::make(name:'avatar')
+  ->maxSize(size: 1024*1024*10)
+  ->image() // restrict to only images both frontend and backend
+  ->avatar() // calls ->image(). see the function definition for more information
+  ->imageEditor() // can edit the image
+  ->directory('avatars')
+```
+
+The image file is first side uploaded into `app\livewire-tmp` waiting for the form to be saved. then the file is moved to the public directory.
+
+#### spatie/laravel-medialibrary and the plugin
+
+
+* [install the plugin and the library](https://filamentphp.com/plugins/filament-spatie-media-library)
+* implements `HasMedia` in the model
+* use `InteractsWithMedia` treats
+
+
+```php
+SpatieMediaLibraryFileUpload::make('images')
+  ->collection('venue-images')
+  ->multiple()
+  ->image(),
+```
+
+There will be a media table in the DB that stores all the filename etc.
+
 
 
 
