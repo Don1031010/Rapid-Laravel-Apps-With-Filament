@@ -261,6 +261,111 @@ SpatieMediaLibraryFileUpload::make('images')
 There will be a media table in the DB that stores all the filename etc.
 
 
+### 3-1 Table Columns
+
+#### Install debug bar
+
+```sh
+composer require barryvdh/laravel-debugbar --dev
+```
+
+#### Toggleable columns
+
+Make a column `->toggleable(isToggledHiddenByDefault: true)` will hide the column unless clicked to show the column.
+
+#### Filament handles the N+1 problem
+
+TalkResource has a speaker name column using relationship `'speaker.name'`. This usually will introduce the N+1 problem, but Filament handles this for us. Filament also handles the search & sort using the relation well.
+
+
+#### Making column wrap
+
+```php
+TextColum::make('abstract')
+  ->wrap()
+```
+
+Make the abstract as the description of the title.
+
+```php
+TextColumn::make('title')
+  ->description( function(Talk $record) {
+    return Str::of($record->abstract)->limit(40);
+  }),
+```
+
+#### Add image avatars
+
+```php
+ImageColumn::make('speaker.avatar')
+  ->circular()
+  ->defaultImageUrl(url: function($record) {
+    return 'https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=' . urlencode($record->speaker->name);
+  }),
+
+```
+
+#### Display boolean data and inline editable columns
+
+```php
+IconColumn::make('new_talk')
+  ->boolean() // check icon for true, cross icon for false
+````
+
+Using toggle column. This is inline editable and the toggle will update the data in database.
+
+```php
+ToggleColumn::make('new_talk')
+```
+
+`TextInputColumn` will make a text column inline editable. 
+
+```php
+TextInputColumn::make('title')
+  ->rules(rules: ['required', 'max:255'])
+```
+
+
+#### Turn off debugbar
+
+Set `APP_DEBUG=false` in `.env` will turn off debugbar.
+
+
+#### badge columns
+
+```php
+enum TalkStatus: string
+{
+ case SUBMITTED = 'Submitted';
+ case APPROVED = 'Approved';
+ case REJECTED = 'Rejected';
+
+ public function getColor(): string
+ {
+  return match($this) {
+   self::SUBMITTED => 'primary',
+   self::APPROVED => 'success',
+   self::REJECTED => 'danger',
+  };
+ }
+}
+```
+
+In the table function of TalkResource,
+
+```php
+TextColumn::make('status')
+ ->badge()
+ ->color(function($state) {
+  return $state->getColor();
+ }),
+```
+
+
+
+
+
+
 
 
 
