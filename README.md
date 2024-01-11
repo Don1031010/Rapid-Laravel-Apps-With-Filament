@@ -361,6 +361,19 @@ TextColumn::make('status')
  }),
 ```
 
+#### icon columns
+
+```php
+IconColumn::make('length')
+ ->icon(function($state) {
+  return match($state) {
+   TalkLength::NORMAL => 'heroicon-o-megaphone',
+   TalkLength::LIGHTNING => 'heroicon-o-bolt',
+   TalkLength::KEYNOTE => 'heroicon-o-key',
+  };
+ })
+```
+
 
 
 
