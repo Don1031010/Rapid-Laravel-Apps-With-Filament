@@ -375,16 +375,62 @@ IconColumn::make('length')
 ```
 
 
+### 3-2 Filters
 
+#### TernaryFilter, SelectFilter, Filter
 
+Inside `TalkResource.php`,
 
+```php
+TernaryFilter::make('new_talk'),
+SelectFilter::make('speaker', 'name')
+ ->multiple()
+ ->searchable()
+ ->preload(),
+Filter::make('has_avatar')
+ ->label('Show only speakers with avatars')
+ ->toggle() // will be a checkbox without this.
+ ->query(function($query) {
+  return $query->whereHas('speaker', function(Builder $query) {
+   $query->whereNotNull('avatar');
+  });
+ }),
 
+```
 
+#### Panel Builder Tabs
 
+This is only available if you are using the panel builder. 
 
+Go to `ListTalks.php`, add a `getTabs` method.
 
+```php
+public function getTabs()
+{
+ return [
+  'all' => Filament\Resources\Components\Tab::make(label: 'All Talks'),
+  'approved' => Tab::make('Approved')
+   ->modifyQueryUsing(callback: function($query) {
+    return $query->where('status', TalkStatus::APPROVED);
+   }),
+ ];
+} 
 
+```
 
+#### Save filters for the session
+
+Go to `table` function, add `->persistFilterInSession()` to `$table`.
+
+#### Add label to filter icon
+
+Add the following to `$table`.
+
+```php
+->filtersTriggerAction(callback: function($action) {
+ return $action->button()->label('Filters');
+ })
+```
 
 ## 4. Other Filament Packages
 
