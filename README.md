@@ -474,6 +474,26 @@ Table\Actions\ActionGroup::make(actions: [
 
 Filament comes with `DeleteBulkAction` and `RestoreBulkAction`. 
 
+```php
+Tables\Actions\BulkAction::make(name: 'approve')
+ ->action(action: function(Collection $records) {
+  $records->each->approve();
+ }),
+```
+
+#### Header Action
+
+```php
+Tables\Actions\Action::make('export')
+ ->tooltip('this will export all records visabiel in the table.')
+ ->action(function($livewire) {
+  ray($livewire->getFilteredTableQuery();
+  ray("exporing talks");
+ })
+
+```
+
+
 ## 4. Other Filament Packages
 
 ### 4-1. Infolist
