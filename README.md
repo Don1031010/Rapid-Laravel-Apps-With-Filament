@@ -449,6 +449,9 @@ If confirmation is required, add `->requiresConfirmation()`.
 ```php
 Tables\Actions\Action::make(name: 'approval')
  ->icon('heroicon-o-circle')
+ ->visible(condition: function($record) {
+  return $record->status === (TalkStatus::SUBMITTED);
+ })
  ->action(caction: function(Talk $record) {
   $record->approve();
  })->after(function() {
@@ -467,7 +470,9 @@ Table\Actions\ActionGroup::make(actions: [
 ]),
 ```
 
+#### BulkActions
 
+Filament comes with `DeleteBulkAction` and `RestoreBulkAction`. 
 
 ## 4. Other Filament Packages
 
