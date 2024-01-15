@@ -498,6 +498,34 @@ Tables\Actions\Action::make('export')
 
 ### 4-1. Infolist
 
+#### Add view page
+
+Run the following command to create the view page. Then register the page in `getPages()` by adding `'view' => Pages\ViewSpeaker::route(path: '/{record}'),`.
+
+```sh
+php artisan make:filament-page
+```
+
+#### Using `infolist` in view page
+
+Add `infolist()` static method.
+
+```php
+public static function infolist(Infolist $infolist): Infolist
+{
+ return $infolist
+  ->schema( components: [
+   Section::make(heading: 'Personal Information')
+   ->schema([
+    TextEntry::make('name'),
+   ])
+  ])
+}
+```
+
+
+
+
 #### `slideOver()` instead of Edit Page
 
 ```php
@@ -510,6 +538,15 @@ protected function getHeaderActions(): Array
   ];
 }
 ```
+
+In `boot()` method, make slide over a default.
+
+```php
+CreateAction::configureUsing(modifyUsing: function($action) {
+ return $action->slideOver();
+});
+```
+
 
 #### Display something not in the database
 
@@ -532,7 +569,46 @@ TextEntry::make('has_spoken')
 
 ```php
 TextEntry::make('bio')
-  ->extraAttributes(['class' => 'prose dark:prose-invert'])
+  ->extraAttributes(['class' => 'prose dark:prose-invert']) // tailwind class 'prose' will do the styling.
   ->html(),
 ```
+### 4-2 Relation Manager
+
+Only available in the Filament panel.
+
+#### Create Relation Manager
+
+```sh
+php artisan make:filament-relation-manager
+```
+
+#### Make relation manager editable on view page
+
+By add the following, the `new talk` and edit button will appear.
+
+```php
+public function isReadOnly(): bool
+{
+ return false;
+}
+```
+
+#### Hide certain fields of resource form
+
+```php
+public function form($form) :Form
+{
+ return $form
+  ->schema(Talk::getForm($this->getOwnerRecord()->id));
+}
+```
+
+```php
+Select::make('speaker_id')
+ ->hidden(function () use($speakerId) {
+  return $speakerId !== null;
+ })
+```
+
+
 
