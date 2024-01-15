@@ -434,7 +434,38 @@ Add the following to `$table`.
 
 ### 3-3 Table action
 
+#### Use Edit modal instead of Edit page
 
+If you remove the edit page from the `getPage()` method, Filament will use modal to edit the page.
+
+Another option is to use slide over edit page. Just add `->slideOver()` to the `EditAction`.
+
+#### Add an approval action to a row
+
+Add the following to the `EditAction`, an Approve button will appear on each row. click it will change the status.
+
+If confirmation is required, add `->requiresConfirmation()`.
+
+```php
+Tables\Actions\Action::make(name: 'approval')
+ ->icon('heroicon-o-circle')
+ ->action(caction: function(Talk $record) {
+  $record->approve();
+ })->after(function() {
+   Filament\Nortification::make()
+    ->success()->duration(1000)->title('Talk was approved')->body('the speaker has been notified...')->send();
+   }),
+```
+
+#### Group actions
+
+Use `ActionGroup` to group actions into a dropdown menu.
+
+```php
+Table\Actions\ActionGroup::make(actions: [
+
+]),
+```
 
 
 
